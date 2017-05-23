@@ -7,22 +7,28 @@ class MainHandler(tornado.web.RequestHandler):
         self.write("Hello, world")
 
 class WSHandler(tornado.websocket.WebSocketHandler):
-    def open (self):
-        print "WS connection open"
-    def on_message (self, message):
-        if message=="on_g":
-            print "ON"
-        if message=="off_g":
-            print "OFF"
 
-        self.write_message(u"xxx")
+    connections = set()
+
+    def open (self):
+        self.connections.add(self)
+        print "WS connection open "
+        [con.write_message("1") for con in self.connections]
+
+    def on_message (self, message):
+        print ("msg")
+        if message=="on_g":
+            [con.write_message("1") for con in self.connections]
+        if message=="off_g":
+            [con.write_message("0") for con in self.connections]
+
 
 
 favicon_path = '.'
 static_path = './static'
 
 handlers = [
-            (r'/favicon.ico', tornado.web.StaticFileHandler, {'path': favicon_path}),
+            (r'/favicon.ico', MainHandler),
             (r'/static/(.*)', tornado.web.StaticFileHandler, {'path': static_path}),
             (r'/', MainHandler),
             (r'/ws', WSHandler)
