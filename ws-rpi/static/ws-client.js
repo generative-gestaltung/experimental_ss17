@@ -1,3 +1,8 @@
+function fill (c) {
+  context.fillStyle = c;
+  conect.fillRect(0,0,canvas.width, canvas.height);
+}
+
 window.onload = function() {
 
   var WEBSOCKET_ROUTE = "/ws";
@@ -14,6 +19,12 @@ window.onload = function() {
 
   ws.onmessage = function(evt) {
     console.log("msg",evt.data);
+    if (evt.data[0]=='r') {
+      fill("#f00");
+    }
+    if (evt.data[0]=='g') {
+      fill("#0f0");
+    }
   };
 
   ws.onclose = function(evt) {
@@ -29,23 +40,5 @@ window.onload = function() {
   }
 
 
-/*
-  $("#green_on").click(function(){
-            ws.send("on_g");
-            });
-
-        $("#green_off").click(function(){
-            ws.send("off_g");
-            });
-
-        $("#red_on").click(function(){
-            ws.send("on_r");
-            });
-
-        $("#red_off").click(function(){
-            ws.send("off_r");
-            });
-
-      });
-*/
+  
 }

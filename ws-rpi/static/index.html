@@ -1,1 +1,36 @@
-XXXX
+<!DOCTYPE HTML>
+<html>
+
+	<head>
+		<script src="ws-client.js"></script>
+	</head>
+
+	<body>
+		<div id="ws-status">xxx</div>
+		<canvas id="myCanvas" width="600" height="800"></canvas>
+		<input type="button" id="button_off" value="off">		
+		<input type="button" id="button_on" value="on">		
+
+
+		<script>
+
+		var canvas = document.getElementById("myCanvas");
+		var context = canvas.getContext('2d');
+
+		var g = 255;
+		context.fillStyle = "rgb(0,"+g+",0)";
+		context.fillRect(0, 0, 200, 200);
+
+
+    		var editor = CodeMirror (document.body, {
+                             value : "x=0",
+                             mode : "python"
+                             }); 
+
+		</script>
+
+	</body>
+
+</html>      
+</head>
+
