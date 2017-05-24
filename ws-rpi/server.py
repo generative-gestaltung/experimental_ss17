@@ -5,7 +5,6 @@ import tornado.web
 import tornado.websocket
 
 
-
 GPIO.setmode (GPIO.BOARD)
 GPIO.setup (16, GPIO.OUT)
 

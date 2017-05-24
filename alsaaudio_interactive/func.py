@@ -2,6 +2,16 @@ import math
 
 TWO_PI = 2*math.pi
 
+
+
+def constrain (inp, min, max):
+	if (inp<min):
+		return min
+	if (inp>max):
+		return max
+	return inp
+
+
 def sin (ph):
 	return math.sin(ph)
 
