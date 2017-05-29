@@ -5,7 +5,7 @@ import RPi.GPIO as GPIO
 
 GPIO.setmode (GPIO.BOARD)
 GPIO.setup (4, GPIO.OUT)
-_on = 0
+
 
 
 class MainHandler(tornado.web.RequestHandler):
@@ -14,6 +14,7 @@ class MainHandler(tornado.web.RequestHandler):
 
 class WSHandler(tornado.websocket.WebSocketHandler):
 
+    self._on = 0
     connections = set()
     def open (self):
         self.connections.add(self)
@@ -22,13 +23,13 @@ class WSHandler(tornado.websocket.WebSocketHandler):
 
     def on_message (self, message):
         print ("msg")
-        if (_on==0):
-            _on = 1
+        if (self._on==0):
+            self._on = 1
             GPIO.output (4, GPIO.HIGH)
         else:
-            _on = 0
+            self._on = 0
             GPIO.output (4, GPIO.LOW)
-            
+
         if message=="on_g":
             [con.write_message("1") for con in self.connections]
         if message=="off_g":
