@@ -1,0 +1,85 @@
+<html>
+<head>
+  <script src="ws_acc.js"></script>
+  <style></style>
+</head>
+
+<body>
+  <canvas id="canvas0" width="1000" height="1500"></canvas>
+
+  <script>
+    var canvas = document.getElementById("canvas0");
+    canvas.addEventListener("click", function(evt) {
+      setElem(evt.clientX, evt.clientY);
+    })
+    var context = canvas.getContext("2d");
+
+    context.fillStyle = "#000";
+    context.fillRect (0, 0, canvas.width, canvas.height);
+
+
+    if (window.DeviceOrientationEvent) {
+      window.addEventListener("deviceorientation", function () {
+        tilt([event.alpha, event.beta, event.gamma]);
+      }, true);
+    } else if (window.DeviceMotionEvent) {
+      window.addEventListener('devicemotion', function () {
+        tilt([event.acceleration.x * 2, event.acceleration.y * 2]);
+      }, true);
+    } else {
+      window.addEventListener("MozOrientation", function () {
+        tilt([orientation.x * 50, orientation.y * 50]);
+      }, true);
+    }
+
+    var N = 100;
+    var data = [];
+    data[0] = [];
+    data[1] = [];
+    data[2] = [];
+
+    for (var i=0; i<N; i++) {
+      data[0].push(0);
+      data[1].push(0);
+      data[2].push(0);
+    }
+
+
+    var st = 0;
+    function draw() {
+
+      var w = canvas.width / 3;
+      var h = canvas.height / N;
+
+      context.fillStyle = "#000";
+      context.fillRect (0, 0, canvas.width, canvas.height);
+
+      context.fillStyle = "#fff";
+      for (var i=0; i<N; i++) {
+        for (var j=0; j<3; j++) {
+          var d = data[j][(i+st)%N];
+          if (d)
+            context.fillRect(w*j+0+d-140, i*h, 5, 5);
+        }
+      }
+
+      requestAnimationFrame(draw);
+    }
+
+    var cnt = 0;
+
+    function tilt(dat) {
+      data[0][cnt] = dat[0]*4;
+      data[1][cnt] = dat[1]*4;
+      data[2][cnt] = dat[2]*4;
+      cnt = (cnt+1)%N;
+      st = (st+1)%N;
+    }
+
+    draw();
+  </script>
+
+
+</body>
+
+</html>

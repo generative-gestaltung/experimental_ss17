@@ -6,7 +6,9 @@ import tornado.websocket
 
 
 GPIO.setmode (GPIO.BOARD)
-GPIO.setup (16, GPIO.OUT)
+GPIO.setup (17, GPIO.OUT)
+GPIO.setup (27, GPIO.OUT)
+GPIO.setup (22, GPIO.OUT)
 
 
 class MainHandler(tornado.web.RequestHandler):
@@ -17,14 +19,8 @@ class WSHandler(tornado.websocket.WebSocketHandler):
     def open (self):
         print "WS connection open"
     def on_message (self, message):
-        if message=="on_g":
-            GPIO.output(16, True)
-            print "ON"
-        if message=="off_g":
-            GPIO.output(16, False)
-            print "OFF"
-
-        self.write_message(u"xxx")
+        print(message)
+        #self.write_message(u"xxx")
 
 
 favicon_path = '.'

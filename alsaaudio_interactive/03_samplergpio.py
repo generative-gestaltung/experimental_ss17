@@ -29,7 +29,6 @@ samples = [
 ];
 
 
-
 def setTimeout (time, f):
 	t = threading.Timer(time, f)
 	t.start()
@@ -61,16 +60,16 @@ def main():
 
 		for i in range (0, PERIOD_SIZE):
 
-			sum = samples[0].getNextValue()	
-			sum += samples[1].getNextValue()	
-			sum += samples[3].getNextValue()	
-			sum += samples[4].getNextValue()	
-			#sum += samples[5].getNextValue()	
-			#sum += samples[6].getNextValue()	
-			#sum += samples[7].getNextValue()	
-			
+			sum = samples[0].getNextValue()
+			sum += samples[1].getNextValue()
+			sum += samples[3].getNextValue()
+			sum += samples[4].getNextValue()
+			#sum += samples[5].getNextValue()
+			#sum += samples[6].getNextValue()
+			#sum += samples[7].getNextValue()
+
 			audio.writeSample (sum)
-	
+
 
 
 if __name__ == '__main__':

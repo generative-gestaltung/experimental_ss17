@@ -13,30 +13,70 @@
     left:300px;
   }
 
+  div {
+    position:absolute;
+    width:70px;
+    height:70px;
+  }
+
+  #div0 {
+    left:0px;
+    top:0px;
+  }
+
+  #div1 {
+    left:100px;
+    top:0px;
+  }
+
+  #div2 {
+    left:200px;
+    top:0px;
+  }
+
+  #div3 {
+    left:0px;
+    top:100px;
+  }
+
+  #div4 {
+    left:100px;
+    top:100px;
+  }
+
+  #div5 {
+    left:200px;
+    top:100px;
+  }
+
+  .dOff {
+    background-color:#f00;
+  }
+  .dOn {
+    background-color:#00f;
+  }
+
 </style>
 <body>
   <script src="ws2.js"></script>
+  <canvas id="canvas0" width="200" height="100"></canvas>
 
-  <canvas id="canvas0" width="300" height="300"/>
-  <canvas id="canvas1" width="300" height="300"/>
+  <div id="div0" class="dOn"> pin0 </div>
+  <div id="div1" class="dOn"> pin1 </div>
+  <div id="div2" class="dOn"> pin2 </div>
+
+  <div id="div3" class="dOff"> pin0 </div>
+  <div id="div4" class="dOff"> pin1 </div>
+  <div id="div5" class="dOff"> pin2 </div>
+
   <script>
-
     var canvas = document.getElementById("canvas0");
     var context = canvas.getContext("2d");
-
-
     context.fillStyle = "#f00";
     context.fillRect (0, 0, canvas.width, canvas.height);
-
-    var canvas1 = document.getElementById("canvas1");
-    var context1 = canvas.getContext("2d");
-    
-
-    context1.fillStyle = "#0f0";
-    context1.fillRect (0, 0, canvas1.width, canvas1.height);
-
-
   </script>
+
+
 </body>
 
 </html>

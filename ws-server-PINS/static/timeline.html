@@ -1,0 +1,146 @@
+<html>
+
+<style>
+  canvas {
+    position:absolute;
+  }
+
+  #canvas0 {
+    left:0px;
+  }
+
+</style>
+<body>
+  <!--
+  <script src="audio.js"></script>
+  -->
+  <script src="ws_timeline.js"></script>
+  <canvas id="canvas0" width="1000" height="1500"></canvas>
+
+
+  <script>
+
+    var canvas = document.getElementById("canvas0");
+    canvas.addEventListener("click", function(evt) {
+      setElem(evt.clientX, evt.clientY);
+    });
+
+    var context = canvas.getContext("2d");
+
+    context.fillStyle = "#000";
+    context.fillRect (0, 0, canvas.width, canvas.height);
+
+    var N = 4;
+    var pos = [];
+    var speed = [];
+    var elems = [];
+    var colors = [];
+    for (var i=0; i<N; i++) {
+      pos.push(0);
+      elems.push([]);
+      colors.push([Math.floor(Math.random()*255),
+                   Math.floor(Math.random()*255),
+                   Math.floor(Math.random()*255)]);
+      speed.push(Math.random()*10+3);
+    }
+
+    function setElem(x,y) {
+      var e = Math.floor(x*N/canvas.width);
+      elems[e].push(new Obj(y,2));
+    }
+
+
+    var Obj = function (y,lifetime) {
+      this.lastY = 0;
+      this.y = y;
+      this.lifetime = lifetime;
+      this.cnt = 0;
+    }
+
+    Obj.prototype.collide = function (y) {
+
+      if (y>=this.y && this.lastY<this.y) {
+        this.lifetime -= 1;
+      }
+      this.lastY = y;
+    }
+
+    function strokeCircle (x,y,R) {
+        context.beginPath();
+        context.moveTo(x+R*Math.sin(k/10*Math.PI),y+R*Math.cos(k/10*Math.PI));
+        for (var k=0; k<20; k++)
+          context.lineTo(x+R*Math.sin(k/10*Math.PI),y+R*Math.cos(k/10*Math.PI));
+        context.closePath();
+        context.stroke();
+    }
+
+    function strokeStar (x,y,R) {
+        context.beginPath();
+        var L = 4;
+        var K = 17;
+        for (var k=0; k<K; k++) {
+          context.moveTo(x,y);
+          for (var l=0; l<L; l++) {
+            context.moveTo(x+l*R/L*Math.sin(k/K*2*Math.PI),y+l*R/L*Math.cos(k/K*2*Math.PI));
+            context.lineTo(x+(l+1)/2*R/L*Math.sin(k/K*2*Math.PI),y+l*R/L*Math.cos(k/K*2*Math.PI));
+          }
+        }
+        context.closePath();
+        context.stroke();
+    }
+
+
+
+    function draw() {
+
+        var SZ0 = 20;
+        var SZ1 = 50;
+        context.lineWidth = 3;
+        context.fillStyle = "rgba(0,0,0,0.2)";
+        context.fillRect (0, 0,canvas.width, canvas.height);
+        context.fillStyle = "#fff";
+
+        var w = canvas.width / N;
+        for (var i=0; i<N; i++) {
+          pos[i] = (pos[i]+speed[i])%canvas.height;
+          context.fillStyle = "#fff";
+
+          var x = i*w+w/2;
+          var y = pos[i];
+          context.fillRect (x-SZ0/2, y, SZ0, SZ0);
+
+          context.strokeStyle = "rgb("+colors[i][0]+","+colors[i][1]+","+colors[i][2]+")";
+          newElems = [];
+          for (var j=0; j<elems[i].length; j++) {
+            elems[i][j].collide(pos[i]);
+            if (elems[i][j].cnt<10)
+              newElems.push(elems[i][j]);
+            if (elems[i][j].lifetime==0) {
+              if (elems[i][j].cnt==0) {
+                if (ws!=null) {
+                  ws.send("g"+i);
+                }
+              }
+              //  ss[i].trigger();
+              strokeStar(x+4,elems[i][j].y+8, elems[i][j].cnt*20);
+              elems[i][j].cnt += 1;
+            }
+
+            context.fillStyle = "rgb("+colors[i][0]+","+colors[i][1]+","+colors[i][2]+")";
+            context.fillRect (i*w+w/2-SZ1/2, elems[i][j].y, SZ1, SZ1);
+          }
+          elems[i] = newElems;
+        }
+
+        requestAnimationFrame(draw);
+    }
+
+    //audio_init();
+    draw();
+
+  </script>
+
+
+</body>
+
+</html>
